@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <title>Recaptha</title>
+</head>
+
+<body>
+    <div class="container">
+        <form id="form">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"> Name</label>
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" />
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" />
+            </div>
+            <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="6LdUqMsZAAAAACfShsyyqDXxOuwwYu3_pfFalyEr"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const captha = document.getElementById("g-recaptcha-response").value;
+
+            fetch("/subscribe", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json,text/plain,*/*",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        captha: captha,
+                    }),
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                });
+
+            console.log("No Error Bro");
+        }
+    </script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
